@@ -1,0 +1,13 @@
+table {
+border: medium solid red;
+width: 50%;
+border-radius: 10px;
+}
+td, th {
+border: thin solid #6495ed;
+width: 50%;
+}
+#tab_ins{
+border: 0px;
+width: 100%;
+}

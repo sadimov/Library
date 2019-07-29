@@ -1,0 +1,214 @@
+<?php include("haut.php"); ?>
+<section id="contenu2"><!-- #contenu2 -->	
+						<?php
+				if(isset($_POST['recherche']))
+				            {
+				             $recherche=$_POST['recherche'];
+				            }
+				else if(isset($_GET['tr']))
+				            {
+				             $recherche=$_GET['tr'];
+				            }
+$db=mysql_connect("localhost","root","");
+ if ($db)
+       {
+	     $seldb=mysql_select_db("bibliotheque");
+		 if($seldb){
+		   $requete0="SELECT categorieid ,parentcategorie FROM categorie WHERE nom LIKE '%$recherche%'";
+		   $reqfinal = mysql_query($requete0);
+		        mysql_close(); 
+				if(mysql_num_rows($reqfinal)==0)
+
+               {
+                  $requete="SELECT * FROM livre ,categorie WHERE livre.livcategorie=categorie.categorieid AND  (titre LIKE '%$recherche%' OR auteur LIKE '%$recherche%' OR isbn LIKE '%$recherche%')";
+		   
+		        $reqfinal = mysql_query($requete); 
+				mysql_close(); 
+				if(mysql_num_rows($reqfinal)==0)
+
+               {
+                  echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+                  echo 'Aucun resultat';
+
+                }
+				
+                else
+                {
+				echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+				while($row=mysql_fetch_array($reqfinal))
+				{
+				$nomimg=$row["nomimg"];
+				$dosimg=$row["dosimg"];
+				if(!empty($row["nomextrait"])AND !empty($row["dosextrait"]))
+				{$nomextrait=$row["nomextrait"];
+				$dosextrait=$row["dosextrait"];
+				$fichier="imlivres/".$dosextrait."/".$nomextrait;
+				$fp = fopen($fichier,"r");}
+				echo ('<img src="imlivres/'.$dosimg.'/'.$nomimg.'"/>');
+				
+                             echo '<br>';
+                             echo "Titre : ".$row["titre"]." <br> Auteur : ".$row["auteur"]. " <br> Categorie : ".$row["nom"].
+							 "<br> isbn : ".$row["isbn"]."<br> Prix : ".$row["prix"]." UM <br> Description : ".$row["descriptionlivre"]."<br>";
+				/*echo  ('<a href="lecture.php?dos='.$dosextrait.'&amp;nom='.$nomextrait.'">Lire l\'extrait gratuit</a>');	*/
+
+				echo  ('<a href="#">Lire l\'extrait gratuit</a>');
+			    echo ('<br><br><form method="post" action="AjouPan2.php?idliv='.$row['livreid'].'&amp;prixliv='.$row['prix'].'&amp;tr='.$recherche.'"><input class="bouton" type="submit" width="5b0" value="Ajouter au panier" /></form>');
+				
+				echo "<br>";
+				
+                }
+				
+				
+				
+			   }
+
+                }
+				else
+				{
+				 while($row=mysql_fetch_array($reqfinal)){
+				                                          $c=$row['categorieid'];
+														  $pc=$row['parentcategorie'];
+														  if(empty($pc)){
+														                $requete="SELECT * FROM livre ,categorie WHERE livre.livcategorie=categorie.categorieid AND categorie.parentcategorie='$c'";
+		   
+		        $reqfinal = mysql_query($requete); 
+				mysql_close(); 
+				if(mysql_num_rows($reqfinal)==0)
+
+               {
+                  echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+                  echo 'Aucun resultat';
+
+                }
+				
+                else
+                {
+				echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+				while($row=mysql_fetch_array($reqfinal))
+				{
+				$nomimg=$row["nomimg"];
+				$dosimg=$row["dosimg"];
+				if(!empty($row["nomextrait"])AND !empty($row["dosextrait"]))
+				{$nomextrait=$row["nomextrait"];
+				$dosextrait=$row["dosextrait"];
+				$fichier="imlivres/".$dosextrait."/".$nomextrait;
+				$fp = fopen($fichier,"r");}
+				echo ('<img src="imlivres/'.$dosimg.'/'.$nomimg.'"/>');
+				
+                             echo '<br>';
+                             echo "Titre : ".$row["titre"]." <br> Auteur : ".$row["auteur"]. " <br> Categorie : ".$row["nom"].
+							 "<br> isbn : ".$row["isbn"]."<br> Prix : ".$row["prix"]." UM <br> Description : ".$row["descriptionlivre"]."<br>";
+				/*echo  ('<a href="lecture.php?dos='.$dosextrait.'&amp;nom='.$nomextrait.'">Lire l\'extrait gratuit</a>');	*/
+
+				echo  ('<a href="#">Lire l\'extrait gratuit</a>');
+			    echo ('<br><br><form method="post" action="AjouPan2.php?idliv='.$row['livreid'].'&amp;prixliv='.$row['prix'].'&amp;tr='.$recherche.'"><input class="bouton" type="submit" width="5b0" value="Ajouter au panier" /></form>');
+				
+				echo "<br>";
+				
+                }
+				
+				
+				
+			   }
+														                 }
+																		 else{
+																		       $requete="SELECT * FROM livre ,categorie WHERE livre.livcategorie=categorie.categorieid AND  categorieid='$c'";
+		   
+		        $reqfinal = mysql_query($requete); 
+				mysql_close(); 
+				if(mysql_num_rows($reqfinal)==0)
+
+               {
+                  echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+                  echo 'Aucun resultat';
+
+                }
+				
+                else
+                {
+				echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+				while($row=mysql_fetch_array($reqfinal))
+				{
+				$nomimg=$row["nomimg"];
+				$dosimg=$row["dosimg"];
+				if(!empty($row["nomextrait"])AND !empty($row["dosextrait"]))
+				{$nomextrait=$row["nomextrait"];
+				$dosextrait=$row["dosextrait"];
+				$fichier="imlivres/".$dosextrait."/".$nomextrait;
+				$fp = fopen($fichier,"r");}
+				echo ('<img src="imlivres/'.$dosimg.'/'.$nomimg.'"/>');
+				
+                             echo '<br>';
+                             echo "Titre : ".$row["titre"]." <br> Auteur : ".$row["auteur"]. " <br> Categorie : ".$row["nom"].
+							 "<br> isbn : ".$row["isbn"]."<br> Prix : ".$row["prix"]." UM <br> Description : ".$row["descriptionlivre"]."<br>";
+				/*echo  ('<a href="lecture.php?dos='.$dosextrait.'&amp;nom='.$nomextrait.'">Lire l\'extrait gratuit</a>');	*/
+
+				echo  ('<a href="#">Lire l\'extrait gratuit</a>');
+			    echo ('<br><br><form method="post" action="AjouPan2.php?idliv='.$row['livreid'].'&amp;prixliv='.$row['prix'].'&amp;tr='.$recherche.'"><input class="bouton" type="submit" width="5b0" value="Ajouter au panier" /></form>');
+				
+				echo "<br>";
+				
+                }
+				
+				
+				
+			   }
+																		      }
+				                                          }
+				}
+                /*$requete="SELECT * FROM livre ,categorie WHERE livre.livcategorie=categorie.categorieid AND  (titre LIKE '%$recherche%' OR auteur LIKE '%$recherche%' OR isbn LIKE '%$recherche%' OR nom LIKE '%$recherche%')";
+		   
+		        $reqfinal = mysql_query($requete); 
+				mysql_close(); 
+				if(mysql_num_rows($reqfinal)==0)
+
+               {
+                  echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+                  echo 'Aucun resultat';
+
+                }
+				
+                else
+                {
+				echo "resultat pour les mots de recherche ".$recherche." : <br><br>";
+				while($row=mysql_fetch_array($reqfinal))
+				{
+				$nomimg=$row["nomimg"];
+				$dosimg=$row["dosimg"];
+				if(!empty($row["nomextrait"])AND !empty($row["dosextrait"]))
+				{$nomextrait=$row["nomextrait"];
+				$dosextrait=$row["dosextrait"];
+				$fichier="imlivres/".$dosextrait."/".$nomextrait;
+				$fp = fopen($fichier,"r");}
+				echo ('<img src="imlivres/'.$dosimg.'/'.$nomimg.'"/>');
+				
+                             echo '<br>';
+                             echo "Titre : ".$row["titre"]." <br> Auteur : ".$row["auteur"]. " <br> Categorie : ".$row["nom"].
+							 "<br> isbn : ".$row["isbn"]."<br> Prix : ".$row["prix"]." UM <br> Description : ".$row["descriptionlivre"]."<br>";
+				/*echo  ('<a href="lecture.php?dos='.$dosextrait.'&amp;nom='.$nomextrait.'">Lire l\'extrait gratuit</a>');	/**
+
+				echo  ('<a href="#">Lire l\'extrait gratuit</a>');
+			    echo ('<br><br><form method="post" action="AjouPan2.php?idliv='.$row['livreid'].'&amp;prixliv='.$row['prix'].'&amp;tr='.$recherche.'"><input class="bouton" type="submit" width="5b0" value="Ajouter au panier" /></form>');
+				
+				echo "<br>";
+				
+                }
+				
+				
+				
+			   }*/
+			  
+			
+		    
+		      }
+	    
+        }
+		
+		
+
+				
+				?>
+						
+			</section>
+<?php include("gauche.php"); ?>
+<?php include("bas.html"); ?>
